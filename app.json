@@ -1,0 +1,26 @@
+{
+  "name": "LinkedIn Business Intelligence Extractor",
+  "description": "A web application for extracting business information from LinkedIn company profiles",
+  "repository": "https://github.com/ezhumalaisanjay/ExtractBusinessInformation",
+  "keywords": ["python", "flask", "linkedin", "scraper", "business-intelligence"],
+  "buildpacks": [
+    {
+      "url": "heroku/python"
+    }
+  ],
+  "env": {
+    "FLASK_ENV": {
+      "description": "Flask environment mode",
+      "value": "production"
+    }
+  },
+  "formation": {
+    "web": {
+      "quantity": 1,
+      "size": "free"
+    }
+  },
+  "scripts": {
+    "postdeploy": "echo 'Application successfully deployed!'"
+  }
+}

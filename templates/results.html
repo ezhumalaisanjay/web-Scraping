@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scraping Results - {{ data.company_name }}</title>
+    <link rel="stylesheet" href="https://cdn.replit.com/agent/bootstrap-agent-dark-theme.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/custom.css') }}">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="/">
+                <i data-feather="search"></i> Business Scraper
+            </a>
+        </div>
+    </nav>
+
+    <main class="container my-5">
+        <div class="row">
+            <div class="col-12 mb-4">
+                <div class="d-flex justify-content-between align-items-center">
+                    <h1>Scraping Results</h1>
+                    <a href="/" class="btn btn-secondary">
+                        <i data-feather="arrow-left"></i> New Search
+                    </a>
+                </div>
+                {% if linkedin_url %}
+                <div class="alert alert-success mb-3">
+                    <i data-feather="check-circle" class="me-2"></i> LinkedIn profile found and extracted!
+                </div>
+                <p class="text-muted">
+                    Source Website: <a href="{{ source_website }}" target="_blank">{{ source_website }}</a><br>
+                    LinkedIn Profile: <a href="{{ linkedin_url }}" target="_blank">{{ linkedin_url }}</a>
+                </p>
+                {% else %}
+                <p class="text-muted">Source: <a href="{{ url }}" target="_blank">{{ url }}</a></p>
+                {% endif %}
+            </div>
+
+            <div class="col-md-8">
+                <div class="card mb-4">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h3 class="card-title mb-0">
+                            <i data-feather="briefcase"></i> Company Information
+                        </h3>
+                    </div>
+                    <div class="card-body">
+                        <h2>{{ data.company_name }}</h2>
+                        {% if data.description %}
+                            <p class="lead">{{ data.description }}</p>
+                        {% endif %}
+                        
+                        {% if data.company_history %}
+                            <div class="mt-4">
+                                <h4>Company History</h4>
+                                
+                                {% if data.company_history.founding_year %}
+                                <div class="mb-3">
+                                    <h5><i data-feather="calendar" class="me-2"></i> Founded</h5>
+                                    <p>{{ data.company_history.founding_context }}</p>
+                                    <div class="badge bg-primary">Founded in {{ data.company_history.founding_year }}</div>
+                                </div>
+                                {% endif %}
+                                
+                                {% if data.company_history.founders %}
+                                <div class="mb-3">
+                                    <h5><i data-feather="users" class="me-2"></i> Founders</h5>
+                                    <p>{{ data.company_history.founder_context }}</p>
+                                </div>
+                                {% endif %}
+                                
+                                {% if data.company_history.employee_count %}
+                                <div class="mb-3">
+                                    <h5><i data-feather="user-plus" class="me-2"></i> Team Size</h5>
+                                    <p>{{ data.company_history.employee_context }}</p>
+                                    <div class="badge bg-info">{{ data.company_history.employee_count }} employees</div>
+                                </div>
+                                {% endif %}
+                                
+                                {% if data.company_history.financial_info %}
+                                <div class="mb-3">
+                                    <h5><i data-feather="dollar-sign" class="me-2"></i> Financial Information</h5>
+                                    <p>{{ data.company_history.financial_info }}</p>
+                                </div>
+                                {% endif %}
+                                
+                                {% if data.company_history.acquisition_info %}
+                                <div class="mb-3">
+                                    <h5><i data-feather="git-merge" class="me-2"></i> Acquisition Information</h5>
+                                    <p>{{ data.company_history.acquisition_info }}</p>
+                                </div>
+                                {% endif %}
+                                
+                                {% if data.company_history.industry %}
+                                <div class="mb-3">
+                                    <h5><i data-feather="briefcase" class="me-2"></i> Industry</h5>
+                                    <p>{{ data.company_history.industry }}</p>
+                                    <div class="badge bg-secondary">{{ data.company_history.industry }}</div>
+                                </div>
+                                {% endif %}
+                                
+                                {% if data.company_history.headquarters %}
+                                <div class="mb-3">
+                                    <h5><i data-feather="map-pin" class="me-2"></i> Headquarters</h5>
+                                    <p>{{ data.company_history.headquarters }}</p>
+                                </div>
+                                {% endif %}
+                                
+                                {% if data.company_history.linkedin_followers %}
+                                <div class="mb-3">
+                                    <h5><i data-feather="users" class="me-2"></i> LinkedIn Followers</h5>
+                                    <p>{{ data.company_history.linkedin_followers }} followers</p>
+                                </div>
+                                {% endif %}
+                                
+                                {% if data.company_history.specialties %}
+                                <div class="mb-3">
+                                    <h5><i data-feather="award" class="me-2"></i> Specialties</h5>
+                                    <div class="d-flex flex-wrap gap-2">
+                                        {% for specialty in data.company_history.specialties %}
+                                            <span class="badge bg-info">{{ specialty }}</span>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                                {% endif %}
+                                
+                                {% if data.company_history.milestones %}
+                                <div class="mb-3">
+                                    <h5><i data-feather="clock" class="me-2"></i> Timeline & Milestones</h5>
+                                    <ul class="list-group list-group-flush">
+                                        {% for milestone in data.company_history.milestones %}
+                                            <li class="list-group-item">{{ milestone }}</li>
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                                {% endif %}
+                                
+                                {% if data.linkedin_data and data.linkedin_data.revenue %}
+                                <div class="mb-3">
+                                    <h5><i data-feather="dollar-sign" class="me-2"></i> Revenue Information</h5>
+                                    <p>{{ data.linkedin_data.revenue }}</p>
+                                </div>
+                                {% endif %}
+                                
+                                {% if data.linkedin_data and data.linkedin_data.highlights %}
+                                <div class="mb-3">
+                                    <h5><i data-feather="award" class="me-2"></i> Company Highlights</h5>
+                                    <p>{{ data.linkedin_data.highlights }}</p>
+                                </div>
+                                {% endif %}
+                            </div>
+                        {% endif %}
+                        
+                        {% if data.keywords %}
+                            <div class="mt-3">
+                                <h5>Keywords</h5>
+                                <div class="d-flex flex-wrap gap-2">
+                                    {% for keyword in data.keywords %}
+                                        <span class="badge bg-secondary">{{ keyword }}</span>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- Services Section -->
+                {% if data.services %}
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h3 class="card-title mb-0">
+                            <i data-feather="package"></i> Services
+                        </h3>
+                    </div>
+                    <div class="card-body">
+                        <ul class="list-group list-group-flush">
+                            {% for service in data.services %}
+                                <li class="list-group-item">{{ service }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+                {% endif %}
+
+                <!-- Products Section -->
+                {% if data.products %}
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h3 class="card-title mb-0">
+                            <i data-feather="shopping-bag"></i> Products
+                        </h3>
+                    </div>
+                    <div class="card-body">
+                        <ul class="list-group list-group-flush">
+                            {% for product in data.products %}
+                                <li class="list-group-item">{{ product }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+                {% endif %}
+                
+                <!-- LinkedIn Data Section -->
+                {% if data.linkedin_data and data.linkedin_data.overview %}
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h3 class="card-title mb-0">
+                            <i data-feather="linkedin"></i> LinkedIn Profile
+                        </h3>
+                    </div>
+                    <div class="card-body">
+                        <!-- LinkedIn Tab Navigation -->
+                        <ul class="nav nav-tabs" id="linkedinTabs" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link active" id="about-tab" data-bs-toggle="tab" data-bs-target="#about-tab-pane" 
+                                        type="button" role="tab" aria-controls="about-tab-pane" aria-selected="true">About</button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="posts-tab" data-bs-toggle="tab" data-bs-target="#posts-tab-pane" 
+                                        type="button" role="tab" aria-controls="posts-tab-pane" aria-selected="false">Posts</button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="jobs-tab" data-bs-toggle="tab" data-bs-target="#jobs-tab-pane" 
+                                        type="button" role="tab" aria-controls="jobs-tab-pane" aria-selected="false">Jobs</button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="people-tab" data-bs-toggle="tab" data-bs-target="#people-tab-pane" 
+                                        type="button" role="tab" aria-controls="people-tab-pane" aria-selected="false">People</button>
+                            </li>
+                        </ul>
+                        
+                        <!-- Tab Content -->
+                        <div class="tab-content pt-3" id="linkedinTabContent">
+                            <!-- ABOUT TAB -->
+                            <div class="tab-pane fade show active" id="about-tab-pane" role="tabpanel" aria-labelledby="about-tab" tabindex="0">
+                                {% if data.linkedin_data.overview %}
+                                <div class="mb-3">
+                                    <h5>Company Overview</h5>
+                                    <div class="p-3 bg-light rounded">
+                                        <p class="mb-0">{{ data.linkedin_data.overview }}</p>
+                                    </div>
+                                </div>
+                                {% endif %}
+                                
+                                {% if data.linkedin_data.specialties %}
+                                <div class="mb-3">
+                                    <h5>Specialties</h5>
+                                    <div class="d-flex flex-wrap gap-2 mb-2">
+                                        {% for specialty in data.linkedin_data.specialties %}
+                                            <span class="badge bg-secondary">{{ specialty }}</span>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                                {% endif %}
+                                
+                                {% if data.linkedin_data.milestones %}
+                                <div class="mb-3">
+                                    <h5>Company Milestones</h5>
+                                    <div class="list-group">
+                                        {% for milestone in data.linkedin_data.milestones %}
+                                            <div class="list-group-item">
+                                                <strong><i data-feather="flag" class="me-1"></i> {{ milestone }}</strong>
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                                {% endif %}
+                                
+                                {% if data.linkedin_data.all_about_sections %}
+                                <div class="mb-3">
+                                    <h5>Additional About Details</h5>
+                                    <div class="accordion" id="aboutSectionsAccordion">
+                                        {% for section in data.linkedin_data.all_about_sections %}
+                                            {% if section != data.linkedin_data.overview %}
+                                            <div class="accordion-item">
+                                                <h2 class="accordion-header" id="section-{{ loop.index }}">
+                                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" 
+                                                            data-bs-target="#section-content-{{ loop.index }}" aria-expanded="false" 
+                                                            aria-controls="section-content-{{ loop.index }}">
+                                                        About Section {{ loop.index }}
+                                                    </button>
+                                                </h2>
+                                                <div id="section-content-{{ loop.index }}" class="accordion-collapse collapse" 
+                                                     aria-labelledby="section-{{ loop.index }}" data-bs-parent="#aboutSectionsAccordion">
+                                                    <div class="accordion-body">
+                                                        <p>{{ section }}</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                                {% endif %}
+                                
+                                {% if data.linkedin_data.website %}
+                                <div class="mb-3">
+                                    <h5>Website</h5>
+                                    <p><a href="{{ data.linkedin_data.website }}" target="_blank">{{ data.linkedin_data.website }}</a></p>
+                                </div>
+                                {% endif %}
+                                
+                                <div class="row">
+                                    {% if data.linkedin_data.follower_count %}
+                                    <div class="col-md-6 mb-3">
+                                        <div class="card bg-light">
+                                            <div class="card-body text-center">
+                                                <h5 class="card-title"><i data-feather="users"></i> Followers</h5>
+                                                <p class="h3">{{ data.linkedin_data.follower_count }}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {% endif %}
+                                    
+                                    {% if data.linkedin_data.company_size %}
+                                    <div class="col-md-6 mb-3">
+                                        <div class="card bg-light">
+                                            <div class="card-body text-center">
+                                                <h5 class="card-title"><i data-feather="user-plus"></i> Company Size</h5>
+                                                <p class="h3">{{ data.linkedin_data.company_size }}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {% endif %}
+                                    
+                                    {% if data.linkedin_data.business_categories %}
+                                    <div class="col-md-12 mb-3">
+                                        <div class="card bg-light">
+                                            <div class="card-body">
+                                                <h5 class="card-title"><i data-feather="tag"></i> Business Categories</h5>
+                                                <div class="d-flex flex-wrap gap-2">
+                                                    {% for category in data.linkedin_data.business_categories %}
+                                                        <span class="badge bg-primary">{{ category }}</span>
+                                                    {% endfor %}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            
+                            <!-- POSTS TAB -->
+                            <div class="tab-pane fade" id="posts-tab-pane" role="tabpanel" aria-labelledby="posts-tab" tabindex="0">
+                                {% if data.linkedin_data.posts and data.linkedin_data.posts.authentication_required %}
+                                    {% if data.linkedin_data.posts.count and data.linkedin_data.posts.count != "0" and data.linkedin_data.posts.count != 0 and data.linkedin_data.posts.count != "Unknown (login required)" %}
+                                    <!-- We have post count data even though authentication was required -->
+                                    <div class="alert alert-info">
+                                        <i data-feather="message-square" class="me-2"></i> {{ data.linkedin_data.posts.count }} posts published
+                                    </div>
+                                    
+                                    <!-- Show a softer message about limited access -->
+                                    <div class="alert alert-secondary mb-3">
+                                        <i data-feather="info" class="me-2"></i> Post content is only available with LinkedIn authentication.
+                                    </div>
+                                    {% else %}
+                                    <!-- No post count - show full authentication message -->
+                                    <div class="alert alert-warning mb-3">
+                                        <i data-feather="lock" class="me-2"></i> LinkedIn requires authentication to view detailed post content.
+                                    </div>
+                                    
+                                    {% if data.linkedin_data.posts.count and data.linkedin_data.posts.count != "0" and data.linkedin_data.posts.count != 0 %}
+                                    <div class="alert alert-info">
+                                        <i data-feather="message-square" class="me-2"></i> {{ data.linkedin_data.posts.count }} posts published
+                                    </div>
+                                    {% endif %}
+                                    {% endif %}
+                                    
+                                    {% if data.linkedin_data.posts.posts %}
+                                    <h5 class="mt-3">Limited Post Information</h5>
+                                    <div class="list-group">
+                                        {% for post in data.linkedin_data.posts.posts %}
+                                        <div class="list-group-item">
+                                            <p class="mb-1">{{ post.text }}</p>
+                                            {% if post.date %}
+                                            <small class="text-muted">{{ post.date }}</small>
+                                            {% endif %}
+                                        </div>
+                                        {% endfor %}
+                                    </div>
+                                    {% endif %}
+                                
+                                {% elif data.linkedin_data.post_count or data.linkedin_data.post_summaries or data.linkedin_data.recent_posts %}
+                                <div class="mb-3">
+                                    {% if data.linkedin_data.post_count %}
+                                    <div class="alert alert-info">
+                                        <i data-feather="message-square" class="me-2"></i> {{ data.linkedin_data.post_count }} posts published
+                                    </div>
+                                    {% endif %}
+                                    
+                                    {% if data.linkedin_data.post_summaries %}
+                                    <h5 class="mt-3">Recent Posts</h5>
+                                    <div class="list-group">
+                                        {% for post in data.linkedin_data.post_summaries %}
+                                        <div class="list-group-item">
+                                            <p class="mb-1">{{ post }}</p>
+                                        </div>
+                                        {% endfor %}
+                                    </div>
+                                    {% endif %}
+                                    
+                                    {% if data.linkedin_data.recent_posts %}
+                                    <h5 class="mt-3">Post Details</h5>
+                                    <div class="accordion" id="postsAccordion">
+                                        {% for post in data.linkedin_data.recent_posts %}
+                                        <div class="accordion-item">
+                                            <h2 class="accordion-header" id="post-header-{{ loop.index }}">
+                                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" 
+                                                        data-bs-target="#post-content-{{ loop.index }}" aria-expanded="false" 
+                                                        aria-controls="post-content-{{ loop.index }}">
+                                                    Post {{ loop.index }} - {{ post.date if post.date else "Recent" }}
+                                                </button>
+                                            </h2>
+                                            <div id="post-content-{{ loop.index }}" class="accordion-collapse collapse" 
+                                                 aria-labelledby="post-header-{{ loop.index }}" data-bs-parent="#postsAccordion">
+                                                <div class="accordion-body">
+                                                    <p>{{ post.text }}</p>
+                                                    {% if post.reactions %}
+                                                    <div class="mt-2 d-flex align-items-center">
+                                                        <i data-feather="thumbs-up" class="me-1"></i>
+                                                        <span class="text-muted">{{ post.reactions }} reactions</span>
+                                                    </div>
+                                                    {% endif %}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        {% endfor %}
+                                    </div>
+                                    {% endif %}
+                                </div>
+                                {% else %}
+                                <div class="alert alert-secondary">
+                                    <i data-feather="info" class="me-2"></i> No posts information available for this company.
+                                </div>
+                                {% endif %}
+                            </div>
+                            
+                            <!-- JOBS TAB -->
+                            <div class="tab-pane fade" id="jobs-tab-pane" role="tabpanel" aria-labelledby="jobs-tab" tabindex="0">
+                                {% if data.linkedin_data.jobs and data.linkedin_data.jobs.authentication_required %}
+                                    {% if data.linkedin_data.jobs.count and data.linkedin_data.jobs.count != "0" and data.linkedin_data.jobs.count != 0 and data.linkedin_data.jobs.count != "Unknown (login required)" %}
+                                    <!-- We have job count data even though authentication was required -->
+                                    <div class="alert alert-info">
+                                        <i data-feather="briefcase" class="me-2"></i> {{ data.linkedin_data.jobs.count }} job openings available
+                                    </div>
+                                    
+                                    <!-- Show a softer message about limited access -->
+                                    <div class="alert alert-secondary mb-3">
+                                        <i data-feather="info" class="me-2"></i> Detailed job listings are only available with LinkedIn authentication.
+                                    </div>
+                                    {% else %}
+                                    <!-- No job count - show full authentication message -->
+                                    <div class="alert alert-warning mb-3">
+                                        <i data-feather="lock" class="me-2"></i> LinkedIn requires authentication to view complete job information.
+                                    </div>
+                                    
+                                    {% if data.linkedin_data.jobs.count and data.linkedin_data.jobs.count != "0" and data.linkedin_data.jobs.count != 0 %}
+                                    <div class="alert alert-info">
+                                        <i data-feather="briefcase" class="me-2"></i> {{ data.linkedin_data.jobs.count }} job openings available
+                                    </div>
+                                    {% endif %}
+                                    {% endif %}
+                                    
+                                    {% if data.linkedin_data.jobs.jobs %}
+                                    <h5 class="mt-3">Limited Job Information</h5>
+                                    <div class="list-group">
+                                        {% for job in data.linkedin_data.jobs.jobs %}
+                                        <div class="list-group-item">
+                                            <div class="d-flex justify-content-between align-items-center">
+                                                <h6 class="mb-1">{{ job.title }}</h6>
+                                                {% if job.date_posted %}
+                                                <span class="badge bg-secondary">{{ job.date_posted }}</span>
+                                                {% endif %}
+                                            </div>
+                                            {% if job.location %}
+                                            <p class="mb-0 text-muted">
+                                                <i data-feather="map-pin" class="me-1"></i> {{ job.location }}
+                                            </p>
+                                            {% endif %}
+                                        </div>
+                                        {% endfor %}
+                                    </div>
+                                    {% endif %}
+                                
+                                {% elif data.linkedin_data.job_opening_count or data.linkedin_data.job_openings %}
+                                <div class="mb-3">
+                                    {% if data.linkedin_data.job_opening_count %}
+                                    <div class="alert alert-info">
+                                        <i data-feather="briefcase" class="me-2"></i> {{ data.linkedin_data.job_opening_count }} job openings available
+                                    </div>
+                                    {% endif %}
+                                    
+                                    {% if data.linkedin_data.job_openings %}
+                                    <h5 class="mt-3">Current Openings</h5>
+                                    <div class="list-group">
+                                        {% for job in data.linkedin_data.job_openings %}
+                                        <div class="list-group-item">
+                                            <div class="d-flex justify-content-between align-items-center">
+                                                <h6 class="mb-1">{{ job.title }}</h6>
+                                                {% if job.date_posted %}
+                                                <span class="badge bg-secondary">{{ job.date_posted }}</span>
+                                                {% endif %}
+                                            </div>
+                                            {% if job.location %}
+                                            <p class="mb-0 text-muted">
+                                                <i data-feather="map-pin" class="me-1"></i> {{ job.location }}
+                                            </p>
+                                            {% endif %}
+                                        </div>
+                                        {% endfor %}
+                                    </div>
+                                    {% endif %}
+                                </div>
+                                {% else %}
+                                <div class="alert alert-secondary">
+                                    <i data-feather="info" class="me-2"></i> No job openings information available for this company.
+                                </div>
+                                {% endif %}
+                            </div>
+                            
+                            <!-- PEOPLE TAB -->
+                            <div class="tab-pane fade" id="people-tab-pane" role="tabpanel" aria-labelledby="people-tab" tabindex="0">
+                                {% if data.linkedin_data.people and data.linkedin_data.people.authentication_required %}
+                                    {% if data.linkedin_data.people.employee_count and data.linkedin_data.people.employee_count != "0" and data.linkedin_data.people.employee_count != 0 and data.linkedin_data.people.employee_count != "Unknown (login required)" %}
+                                    <!-- We have employee count data even though authentication was required -->
+                                    <div class="alert alert-info">
+                                        <i data-feather="users" class="me-2"></i> {{ data.linkedin_data.people.employee_count }} employees
+                                    </div>
+                                    
+                                    <!-- Show a softer message about limited access -->
+                                    <div class="alert alert-secondary mb-3">
+                                        <i data-feather="info" class="me-2"></i> Some additional employee details are only available with LinkedIn authentication.
+                                    </div>
+                                    {% else %}
+                                    <!-- No employee count - show full authentication message -->
+                                    <div class="alert alert-warning mb-3">
+                                        <i data-feather="lock" class="me-2"></i> LinkedIn requires authentication to view complete employee information.
+                                    </div>
+                                    
+                                    {% if data.linkedin_data.people.employee_count and data.linkedin_data.people.employee_count != "0" and data.linkedin_data.people.employee_count != 0 %}
+                                    <div class="alert alert-info">
+                                        <i data-feather="users" class="me-2"></i> {{ data.linkedin_data.people.employee_count }} employees
+                                    </div>
+                                    {% endif %}
+                                    {% endif %}
+                                    
+                                    {% if data.linkedin_data.people.leaders %}
+                                    <h5 class="mt-3">Limited Leadership Information</h5>
+                                    <div class="list-group mb-3">
+                                        {% for leader in data.linkedin_data.people.leaders %}
+                                        <div class="list-group-item">
+                                            <h6 class="mb-1">{{ leader.name }}</h6>
+                                            {% if leader.title %}
+                                            <p class="mb-0 text-muted">{{ leader.title }}</p>
+                                            {% endif %}
+                                        </div>
+                                        {% endfor %}
+                                    </div>
+                                    {% endif %}
+                                    
+                                    <div class="row">
+                                        {% if data.linkedin_data.people.departments %}
+                                        <div class="col-md-6 mb-3">
+                                            <h5>Departments</h5>
+                                            <div class="list-group">
+                                                {% for department in data.linkedin_data.people.departments %}
+                                                <div class="list-group-item d-flex justify-content-between align-items-center">
+                                                    {{ department.department }}
+                                                    {% if department.percentage %}
+                                                    <span class="badge bg-primary">{{ department.percentage }}</span>
+                                                    {% endif %}
+                                                </div>
+                                                {% endfor %}
+                                            </div>
+                                        </div>
+                                        {% endif %}
+                                        
+                                        {% if data.linkedin_data.people.locations %}
+                                        <div class="col-md-6 mb-3">
+                                            <h5>Locations</h5>
+                                            <div class="list-group">
+                                                {% for location in data.linkedin_data.people.locations %}
+                                                <div class="list-group-item d-flex justify-content-between align-items-center">
+                                                    {{ location.location }}
+                                                    {% if location.percentage %}
+                                                    <span class="badge bg-primary">{{ location.percentage }}</span>
+                                                    {% endif %}
+                                                </div>
+                                                {% endfor %}
+                                            </div>
+                                        </div>
+                                        {% endif %}
+                                    </div>
+                                
+                                {% elif data.linkedin_data.employee_count_from_people or data.linkedin_data.leadership_team or data.linkedin_data.departments or data.linkedin_data.employee_locations %}
+                                <div class="mb-3">
+                                    {% if data.linkedin_data.employee_count_from_people %}
+                                    <div class="alert alert-info">
+                                        <i data-feather="users" class="me-2"></i> {{ data.linkedin_data.employee_count_from_people }} employees
+                                    </div>
+                                    {% endif %}
+                                    
+                                    {% if data.linkedin_data.leadership_team %}
+                                    <h5 class="mt-3">Leadership Team</h5>
+                                    <div class="list-group mb-3">
+                                        {% for leader in data.linkedin_data.leadership_team %}
+                                        <div class="list-group-item">
+                                            <h6 class="mb-1">{{ leader.name }}</h6>
+                                            {% if leader.title %}
+                                            <p class="mb-0 text-muted">{{ leader.title }}</p>
+                                            {% endif %}
+                                        </div>
+                                        {% endfor %}
+                                    </div>
+                                    {% endif %}
+                                    
+                                    <div class="row">
+                                        {% if data.linkedin_data.departments %}
+                                        <div class="col-md-6 mb-3">
+                                            <h5>Departments</h5>
+                                            <div class="list-group">
+                                                {% for department in data.linkedin_data.departments %}
+                                                <div class="list-group-item d-flex justify-content-between align-items-center">
+                                                    {{ department.department }}
+                                                    {% if department.percentage %}
+                                                    <span class="badge bg-primary">{{ department.percentage }}</span>
+                                                    {% endif %}
+                                                </div>
+                                                {% endfor %}
+                                            </div>
+                                        </div>
+                                        {% endif %}
+                                        
+                                        {% if data.linkedin_data.employee_locations %}
+                                        <div class="col-md-6 mb-3">
+                                            <h5>Locations</h5>
+                                            <div class="list-group">
+                                                {% for location in data.linkedin_data.employee_locations %}
+                                                <div class="list-group-item d-flex justify-content-between align-items-center">
+                                                    {{ location.location }}
+                                                    {% if location.percentage %}
+                                                    <span class="badge bg-primary">{{ location.percentage }}</span>
+                                                    {% endif %}
+                                                </div>
+                                                {% endfor %}
+                                            </div>
+                                        </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                {% else %}
+                                <div class="alert alert-secondary">
+                                    <i data-feather="info" class="me-2"></i> No people information available for this company.
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+
+            <div class="col-md-4">
+                <!-- Contact Information Card -->
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h3 class="card-title mb-0">
+                            <i data-feather="phone"></i> Contact Information
+                        </h3>
+                    </div>
+                    <div class="card-body">
+                        <!-- Email Addresses -->
+                        {% if data.contact_info.emails %}
+                            <div class="mb-3">
+                                <h5>Email Addresses</h5>
+                                <ul class="list-group list-group-flush">
+                                    {% for email in data.contact_info.emails %}
+                                        <li class="list-group-item d-flex align-items-center">
+                                            <i data-feather="mail" class="me-2"></i>
+                                            <a href="mailto:{{ email }}">{{ email }}</a>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        {% endif %}
+
+                        <!-- Phone Numbers -->
+                        {% if data.contact_info.phones %}
+                            <div class="mb-3">
+                                <h5>Phone Numbers</h5>
+                                <ul class="list-group list-group-flush">
+                                    {% for phone in data.contact_info.phones %}
+                                        <li class="list-group-item d-flex align-items-center">
+                                            <i data-feather="phone" class="me-2"></i>
+                                            <a href="tel:{{ phone }}">{{ phone }}</a>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        {% endif %}
+
+                        <!-- Addresses -->
+                        {% if data.contact_info.addresses %}
+                            <div class="mb-3">
+                                <h5>Addresses</h5>
+                                <ul class="list-group list-group-flush">
+                                    {% for address in data.contact_info.addresses %}
+                                        <li class="list-group-item d-flex align-items-center">
+                                            <i data-feather="map-pin" class="me-2"></i>
+                                            {{ address }}
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        {% endif %}
+
+                        <!-- Social Media -->
+                        {% if data.contact_info.social_media %}
+                            <div class="mb-3">
+                                <h5>Social Media</h5>
+                                <ul class="list-group list-group-flush">
+                                    {% for platform, links in data.contact_info.social_media.items() %}
+                                        {% for link in links %}
+                                            <li class="list-group-item d-flex align-items-center">
+                                                <i data-feather="{{ platform if platform in ['facebook', 'twitter', 'linkedin', 'instagram'] else 'link' }}" class="me-2"></i>
+                                                <a href="https://{{ link }}" target="_blank">{{ platform.title() }}</a>
+                                            </li>
+                                        {% endfor %}
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        {% endif %}
+
+                        {% if not data.contact_info.emails and not data.contact_info.phones and not data.contact_info.addresses and not data.contact_info.social_media %}
+                            <div class="alert alert-warning">
+                                <i data-feather="alert-triangle"></i> No contact information found.
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- JSON Data Card -->
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h3 class="card-title mb-0">
+                            <i data-feather="code"></i> API Response
+                        </h3>
+                        <button class="btn btn-sm btn-outline-primary" id="copyJson">
+                            <i data-feather="copy"></i> Copy
+                        </button>
+                    </div>
+                    <div class="card-body">
+                        <pre class="json-content"><code id="jsonData">{{ data | tojson(indent=2) }}</code></pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="bg-dark text-light py-4 mt-5">
+        <div class="container text-center">
+            <p>&copy; 2023 Business Scraper | Extracts structured business information from websites</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>

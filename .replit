@@ -1,0 +1,44 @@
+modules = ["python-3.10", "web", "bash", "nodejs-20"]
+run = "gunicorn --bind 0.0.0.0:5000 main:app"
+
+[nix]
+channel = "stable-24_05"
+packages = ["openssl", "postgresql"]
+
+[deployment]
+deploymentTarget = "autoscale"
+run = ["sh", "-c", "gunicorn --bind 0.0.0.0:5000 --workers 3 --timeout 120 main:app"]
+
+[workflows]
+runButton = "Start Flask App"
+
+[[workflows.workflow]]
+name = "Project"
+mode = "parallel"
+author = "agent"
+
+[[workflows.workflow.tasks]]
+task = "workflow.run"
+args = "Start application"
+
+[[workflows.workflow]]
+name = "Start application"
+author = "agent"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "gunicorn --bind 0.0.0.0:5000 --reuse-port --reload main:app"
+waitForPort = 5000
+
+[[workflows.workflow]]
+name = "Start Flask App"
+author = 42066327
+mode = "sequential"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "gunicorn --bind 0.0.0.0:5000 --workers 3 --timeout 120 main:app"
+
+[[ports]]
+localPort = 5000
+externalPort = 80

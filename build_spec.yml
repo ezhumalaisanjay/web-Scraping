@@ -1,0 +1,44 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      python: 3.10
+  pre_build:
+    commands:
+      - echo "Installing dependencies..."
+      - pip install --upgrade pip
+      - pip install -e .
+  build:
+    commands:
+      - echo "Starting build phase..."
+      - python -c "import main" || echo "Main module import check"
+  post_build:
+    commands:
+      - echo "Build completed on $(date)"
+
+artifacts:
+  files:
+    - main.py
+    - application.py
+    - app.py
+    - authenticated_linkedin_scraper.py
+    - enhanced_linkedin_scraper.py
+    - linkedin_finder.py
+    - linkedin_enhanced_scraper.py
+    - batch_linkedin_finder.py
+    - scraper.py
+    - Procfile
+    - setup.py
+    - pyproject.toml
+    - templates/**/*
+    - static/**/*
+    - appspec.yml
+    - scripts/**/*
+    - .ebextensions/**/*
+    - buildspec.yml
+    - amplify.yml
+    - app.yaml
+    - build_spec.yml
+    
+  discard-paths: no

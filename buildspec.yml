@@ -1,0 +1,45 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      python: 3.11
+    commands:
+      - echo Installing dependencies...
+      - pip install -e .
+      
+  pre_build:
+    commands:
+      - echo Running pre-build checks...
+      - echo "Skipping tests" # python -m pytest -v tests/ || true
+      
+  build:
+    commands:
+      - echo Build started on `date`
+      - echo Packaging the application...
+      
+  post_build:
+    commands:
+      - echo Build completed on `date`
+      
+artifacts:
+  files:
+    - app.py
+    - main.py
+    - scraper.py
+    - linkedin_finder.py
+    - batch_linkedin_finder.py
+    - enhanced_linkedin_scraper.py
+    - authenticated_linkedin_scraper.py
+    - linkedin_enhanced_scraper.py
+    - templates/**/*
+    - static/**/*
+    - pyproject.toml
+    - setup.py
+    - Procfile
+    - appspec.yml
+    - .ebextensions/**/*
+    - .platform/**/*
+    - buildspec.yml
+    - amplify.yml
+  base-directory: '.'

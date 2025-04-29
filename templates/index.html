@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LinkedIn Business Information Extractor</title>
+<script>
+    // Handle redirect after page load if needed
+    window.onload = function() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const redirect = urlParams.get('redirect');
+        if (redirect && window.location.pathname === '/') {
+            window.location.href = redirect;
+        }
+    }
+</script>
+    <link rel="stylesheet" href="https://cdn.replit.com/agent/bootstrap-agent-dark-theme.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/custom.css') }}">
+    <style>
+        body {
+            background-color: #0d1117;
+            color: #c9d1d9;
+        }
+        .container {
+            max-width: 800px;
+        }
+        .section {
+            background-color: #1a1f24;
+            border-radius: 6px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+        .feature-item {
+            padding: 1rem 0;
+            border-bottom: 1px solid #30363d;
+        }
+        .feature-item:last-child {
+            border-bottom: none;
+        }
+        .btn-primary {
+            background-color: #1f6feb;
+            border-color: #1f6feb;
+        }
+        .btn-primary:hover {
+            background-color: #388bfd;
+            border-color: #388bfd;
+        }
+        .btn-block {
+            width: 100%;
+        }
+        .check-icon {
+            color: #3fb950;
+        }
+        h1, h2, h3 {
+            color: #e6edf3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container py-5">
+        <header class="text-center mb-5">
+            <h1 class="display-4 mb-3">LinkedIn Business Information Extractor</h1>
+            <p class="lead">A comprehensive tool for extracting business intelligence from LinkedIn company profiles</p>
+        </header>
+
+        <div class="section">
+            <h2 class="mb-4 text-center">Get Started</h2>
+            <p class="mb-4 text-center">Use our tool to extract detailed business information from LinkedIn company profiles.</p>
+
+            <div class="d-grid gap-3">
+                <form action="/scrape" method="POST" class="mb-3">
+                    <input type="text" name="url" class="form-control mb-3" placeholder="Enter LinkedIn URL or company website" required>
+                    <button type="submit" class="btn btn-primary btn-lg w-100">Extract LinkedIn Data</button>
+                </form>
+                <a href="{{ url_for('main.batch') }}" class="btn btn-outline-secondary btn-lg">Batch Process URLs</a>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="mb-4 text-center">Features</h2>
+
+            <div class="feature-item d-flex align-items-center">
+                <div class="me-3">
+                    <i data-feather="check-circle" class="check-icon"></i>
+                </div>
+                <div>Company overview and about section</div>
+            </div>
+
+            <div class="feature-item d-flex align-items-center">
+                <div class="me-3">
+                    <i data-feather="check-circle" class="check-icon"></i>
+                </div>
+                <div>Recent posts and their summaries</div>
+            </div>
+
+            <div class="feature-item d-flex align-items-center">
+                <div class="me-3">
+                    <i data-feather="check-circle" class="check-icon"></i>
+                </div>
+                <div>Job openings and opportunities</div>
+            </div>
+
+            <div class="feature-item d-flex align-items-center">
+                <div class="me-3">
+                    <i data-feather="check-circle" class="check-icon"></i>
+                </div>
+                <div>Company people and leadership team</div>
+            </div>
+
+            <div class="feature-item d-flex align-items-center">
+                <div class="me-3">
+                    <i data-feather="check-circle" class="check-icon"></i>
+                </div>
+                <div>Batch processing for multiple companies</div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize Feather icons
+            feather.replace();
+        });
+    </script>
+</body>
+</html>

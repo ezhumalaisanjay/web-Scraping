@@ -1,0 +1,107 @@
+version: 1
+backend:
+  phases:
+    preBuild:
+      commands:
+        - echo "Setting up Python environment"
+        - pyenv global 3.10.16
+        - python --version
+        - chmod +x amplify-hooks/pre-deploy.sh
+        - amplify-hooks/pre-deploy.sh
+    build:
+      commands:
+        - pip install --upgrade pip
+        - pip install -e .
+        - echo "Creating static directory for assets"
+        - mkdir -p static/css
+        - mkdir -p static/js
+        - mkdir -p static/images
+        - echo "Setting up server configuration"
+        - echo "export PORT=8080" > .env
+        - echo '#!/bin/bash' > start.sh
+        - echo 'cd $CODEBUILD_SRC_DIR' >> start.sh
+        - echo 'gunicorn --bind 0.0.0.0:8080 --workers 3 main:app' >> start.sh
+        - chmod +x start.sh
+        - echo "Build completed on $(date)"
+    postBuild:
+      commands:
+        - echo "Running post-deployment checks"
+        - chmod +x amplify-hooks/post-deploy.sh
+        - amplify-hooks/post-deploy.sh
+        - echo "Setting up Flask application"
+        - python -c "import scripts.cors_handler; print('CORS handler available for deployment')"
+        - echo "export FLASK_APP=main.py" >> .env
+        - echo "export FLASK_ENV=production" >> .env
+        - echo "export PYTHONPATH=/var/app/current" >> .env
+  artifacts:
+    baseDirectory: /
+    files:
+      - '**/*'
+      - 'static/**/*'
+    discard-paths: no
+  cache:
+    paths: []
+frontend:
+  phases:
+    preBuild:
+      commands:
+        - echo "Setting up frontend environment"
+    build:
+      commands:
+        - echo "Building frontend assets"
+    postBuild:
+      commands:
+        - echo "Frontend build completed"
+  artifacts:
+    baseDirectory: /
+    files:
+      - '**/*'
+  customHeaders:
+    - pattern: '**/*'
+      headers:
+        - key: 'Strict-Transport-Security'
+          value: 'max-age=31536000; includeSubDomains'
+        - key: 'X-Frame-Options'
+          value: 'SAMEORIGIN'
+        - key: 'X-XSS-Protection'
+          value: '1; mode=block'
+        - key: 'X-Content-Type-Options'
+          value: 'nosniff'
+        - key: 'Access-Control-Allow-Origin'
+          value: '*'
+        - key: 'Access-Control-Allow-Methods'
+          value: 'GET, POST, OPTIONS'
+        - key: 'Access-Control-Allow-Headers'
+          value: 'Content-Type, Authorization'
+
+  redirects:
+    - source: '/api/*'
+      target: '/api/:splat'
+      status: '200'
+    - source: '/static/*'
+      target: '/static/:splat'
+      status: '200'
+    - source: '/extract'
+      target: '/extract'
+      status: '200'
+    - source: '/batch'
+      target: '/batch'
+      status: '200'
+    - source: '/scrape'
+      target: '/scrape'
+      status: '200'
+    - source: '/about'
+      target: '/about'
+      status: '200'
+    - source: '/health'
+      target: '/health'
+      status: '200'
+    - source: '/'
+      target: '/'
+      status: '200'
+
+buildSpec: amplify.yml
+appRoot: /
+host:
+  framework: 'flask'
+  entryFile: 'main:app'

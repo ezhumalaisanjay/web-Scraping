@@ -1,0 +1,98 @@
+{
+  "appName": "LinkedIn Business Intelligence Extractor",
+  "framework": "flask",
+  "buildSpec": "amplify.yml",
+  "deploymentType": "manual",
+  "environment": {
+    "FLASK_APP": "main.py",
+    "FLASK_ENV": "production",
+    "PORT": "8080",
+    "PYTHONPATH": "/var/app/current"
+  },
+  "buildSettings": {
+    "appRoot": "/",
+    "distDir": "/",
+    "baseDirectory": "/",
+    "buildCommand": "pip install -e ."
+  },
+  "customRules": [
+    {
+      "source": "/api/*",
+      "target": "/api/:splat",
+      "status": "200"
+    },
+    {
+      "source": "/static/*",
+      "target": "/static/:splat",
+      "status": "200"
+    },
+    {
+      "source": "/extract",
+      "target": "/extract",
+      "status": "200"
+    },
+    {
+      "source": "/batch",
+      "target": "/batch",
+      "status": "200"
+    },
+    {
+      "source": "/scrape",
+      "target": "/scrape",
+      "status": "200"
+    },
+    {
+      "source": "/health",
+      "target": "/health",
+      "status": "200"
+    },
+    {
+      "source": "/",
+      "target": "/",
+      "status": "200"
+    }
+  ],
+  "serverConfig": {
+    "port": 8080,
+    "timeout": 120,
+    "retryPolicy": {
+      "interval": 30,
+      "count": 3
+    }
+  },
+  "customHeaders": [
+    {
+      "pattern": "**/*",
+      "headers": [
+        {
+          "key": "Strict-Transport-Security",
+          "value": "max-age=31536000; includeSubDomains"
+        },
+        {
+          "key": "X-Frame-Options",
+          "value": "SAMEORIGIN"
+        },
+        {
+          "key": "X-XSS-Protection",
+          "value": "1; mode=block"
+        },
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "Access-Control-Allow-Origin",
+          "value": "*"
+        },
+        {
+          "key": "Access-Control-Allow-Methods",
+          "value": "GET, POST, OPTIONS"
+        },
+        {
+          "key": "Access-Control-Allow-Headers",
+          "value": "Content-Type, Authorization"
+        }
+      ]
+    }
+  ]
+}

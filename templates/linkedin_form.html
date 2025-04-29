@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Extract LinkedIn Data - Business Information Extractor</title>
+    <link rel="stylesheet" href="https://cdn.replit.com/agent/bootstrap-agent-dark-theme.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/custom.css') }}">
+    <style>
+        body {
+            background-color: #0d1117;
+            color: #c9d1d9;
+        }
+        .container {
+            max-width: 800px;
+        }
+        .section {
+            background-color: #1a1f24;
+            border-radius: 6px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+        .btn-primary {
+            background-color: #1f6feb;
+            border-color: #1f6feb;
+        }
+        .btn-primary:hover {
+            background-color: #388bfd;
+            border-color: #388bfd;
+        }
+        .form-control, .form-select {
+            background-color: #0d1117;
+            border-color: #30363d;
+            color: #c9d1d9;
+        }
+        .form-control:focus, .form-select:focus {
+            background-color: #161b22;
+            border-color: #1f6feb;
+            color: #e6edf3;
+        }
+        h1, h2, h3 {
+            color: #e6edf3;
+        }
+        .form-check-input {
+            background-color: #0d1117;
+            border-color: #30363d;
+        }
+        .form-check-input:checked {
+            background-color: #1f6feb;
+            border-color: #1f6feb;
+        }
+    </style>
+</head>
+<body>
+    <div class="container py-5">
+        <header class="text-center mb-5">
+            <h1 class="display-5 mb-3">Extract LinkedIn Data</h1>
+            <p class="lead">Enter a LinkedIn company URL or website to extract business intelligence</p>
+        </header>
+
+        <div class="section">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }} mb-4">{{ message }}</div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+
+            <form action="{{ url_for('scrape.scrape') }}" method="POST">
+                <div class="mb-4">
+                    <label for="url" class="form-label">Company URL</label>
+                    <input type="text" class="form-control form-control-lg" id="url" name="url" 
+                           placeholder="linkedin.com/company/microsoft or example.com" required>
+                    <div class="form-text mt-2">
+                        Enter a LinkedIn company URL or a regular company website
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <label class="form-label d-block">Extraction Mode</label>
+                    
+                    <div class="form-check mb-2">
+                        <input class="form-check-input" type="radio" name="mode" id="mode-direct" value="direct" checked>
+                        <label class="form-check-label" for="mode-direct">
+                            <i data-feather="search" class="me-2" style="width: 18px; height: 18px;"></i>
+                            Direct Extraction
+                        </label>
+                        <div class="form-text ms-4">
+                            Extract information directly from the provided URL
+                        </div>
+                    </div>
+                    
+                    <div class="form-check">
+                        <input class="form-check-input" type="radio" name="mode" id="mode-find-linkedin" value="find_linkedin">
+                        <label class="form-check-label" for="mode-find-linkedin">
+                            <i data-feather="linkedin" class="me-2" style="width: 18px; height: 18px;"></i>
+                            Find LinkedIn & Extract
+                        </label>
+                        <div class="form-text ms-4">
+                            Enter a company website URL, and we'll find their LinkedIn profile and extract data
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="use-auth" name="use_auth" value="true">
+                        <label class="form-check-label" for="use-auth">
+                            <i data-feather="unlock" class="me-2" style="width: 18px; height: 18px;"></i>
+                            Use authenticated access for LinkedIn (gets more complete data)
+                        </label>
+                        <div class="form-text ms-4">
+                            Use LinkedIn authentication to extract comprehensive data including posts, jobs, and people
+                        </div>
+                    </div>
+                </div>
+
+                <div class="d-grid">
+                    <button type="submit" class="btn btn-primary btn-lg">
+                        <i data-feather="search" class="me-2"></i> Extract Business Data
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <div class="section">
+            <h3 class="mb-3">Example LinkedIn URLs</h3>
+            <ul class="list-group list-group-flush bg-transparent">
+                <li class="list-group-item bg-transparent border-secondary">linkedin.com/company/microsoft</li>
+                <li class="list-group-item bg-transparent border-secondary">linkedin.com/company/apple</li>
+                <li class="list-group-item bg-transparent border-secondary">linkedin.com/company/amazon</li>
+                <li class="list-group-item bg-transparent border-secondary">linkedin.com/company/google</li>
+            </ul>
+        </div>
+
+        <div class="text-center mt-4">
+            <a href="{{ url_for('main.index') }}" class="btn btn-outline-secondary">
+                <i data-feather="arrow-left" class="me-2"></i> Back to Home
+            </a>
+            <a href="{{ url_for('main.batch') }}" class="btn btn-outline-primary ms-2">
+                <i data-feather="layers" class="me-2"></i> Try Batch Processing
+            </a>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize Feather icons
+            feather.replace();
+        });
+    </script>
+</body>
+</html>

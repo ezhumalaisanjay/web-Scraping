@@ -1,0 +1,34 @@
+version: 1.0
+runtime: python3
+build:
+  commands:
+    pre_build:
+      - echo "Setting up Python environment"
+      - python --version
+      - pip install --upgrade pip
+    build:
+      - pip install -e .
+      - echo "Flask application build complete"
+    post_build:
+      - python -c "import scripts.cors_handler; print('CORS handler setup complete')"
+run:
+  command: scripts/start_application.sh
+  network:
+    port: 8080
+    env: PORT
+hooks:
+  preBuild:
+    - amplify-hooks/pre-deploy.sh
+  postBuild:
+    - amplify-hooks/post-deploy.sh
+env:
+  variables:
+    FLASK_APP: main.py
+    FLASK_ENV: production
+    PYTHONPATH: /var/app/current
+health_check:
+  path: /health
+  interval: 30
+  timeout: 5
+  unhealthy_threshold: 3
+  healthy_threshold: 2

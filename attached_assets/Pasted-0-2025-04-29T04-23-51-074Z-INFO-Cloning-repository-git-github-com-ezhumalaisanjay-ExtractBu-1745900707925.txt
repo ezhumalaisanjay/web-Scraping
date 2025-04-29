@@ -1,0 +1,159 @@
+0
+
+2025-04-29T04:23:51.074Z [INFO]: # Cloning repository: git@github.com:ezhumalaisanjay/ExtractBusinessInformation.git
+
+1
+
+2025-04-29T04:23:52.100Z [INFO]: 
+
+2
+
+2025-04-29T04:23:52.101Z [INFO]: Cloning into 'ExtractBusinessInformation'...
+
+3
+
+2025-04-29T04:23:52.101Z [INFO]: # Switching to commit: ef33aab82d80cc884d8b3de74a4c24d63cdd1fe9
+
+4
+
+2025-04-29T04:23:52.123Z [INFO]: Note: switching to 'ef33aab82d80cc884d8b3de74a4c24d63cdd1fe9'.
+
+5
+
+                                 You are in 'detached HEAD' state. You can look around, make experimental
+
+6
+
+                                 changes and commit them, and you can discard any commits you make in this
+
+7
+
+                                 state without impacting any branches by switching back to a branch.
+
+8
+
+                                 If you want to create a new branch to retain commits you create, you may
+
+9
+
+                                 do so (now or later) by using -c with the switch command. Example:
+
+10
+
+                                 git switch -c <new-branch-name>
+
+11
+
+                                 Or undo this operation with:
+
+12
+
+                                 git switch -
+
+13
+
+                                 Turn off this advice by setting config variable advice.detachedHead to false
+
+14
+
+                                 HEAD is now at ef33aab Prepare application for cloud deployment and improve project documentation
+
+15
+
+2025-04-29T04:23:52.168Z [INFO]: Successfully cleaned up Git credentials
+
+16
+
+2025-04-29T04:23:52.168Z [INFO]: # Checking for Git submodules at: /codebuild/output/src498567751/src/ExtractBusinessInformation/.gitmodules
+
+17
+
+2025-04-29T04:23:52.173Z [INFO]: # Retrieving environment cache...
+
+18
+
+2025-04-29T04:23:52.231Z [WARNING]: ! Unable to write cache: {"code":"ERR_BAD_REQUEST","message":"Request failed with status code 404"})}
+
+19
+
+2025-04-29T04:23:52.231Z [INFO]: ---- Setting Up SSM Secrets ----
+
+20
+
+2025-04-29T04:23:52.231Z [INFO]: SSM params {"Path":"/amplify/d2xmglkf3lf43j/main/","WithDecryption":true}
+
+21
+
+2025-04-29T04:23:52.278Z [WARNING]: !Failed to set up process.env.secrets
+
+22
+
+2025-04-29T04:23:53.037Z [INFO]: # No package override configuration found.
+
+23
+
+2025-04-29T04:23:53.041Z [INFO]: # Retrieving cache...
+
+24
+
+2025-04-29T04:23:53.077Z [INFO]: # Retrieved cache
+
+25
+
+2025-04-29T04:24:13.713Z [INFO]: ## Starting Backend Build
+
+26
+
+                                 # Starting phase: build
+
+27
+
+                                 # Executing command: pip install -e .
+
+28
+
+2025-04-29T04:24:24.876Z [INFO]: Obtaining file:///codebuild/output/src498567751/src/ExtractBusinessInformation
+
+29
+
+2025-04-29T04:24:24.882Z [INFO]: Installing build dependencies: started
+
+30
+
+2025-04-29T04:24:33.623Z [INFO]: Installing build dependencies: finished with status 'done'
+
+31
+
+2025-04-29T04:24:33.627Z [INFO]: Checking if build backend supports build_editable: started
+
+32
+
+2025-04-29T04:24:34.019Z [INFO]: Checking if build backend supports build_editable: finished with status 'done'
+
+33
+
+2025-04-29T04:24:34.020Z [INFO]: Getting requirements to build editable: started
+
+34
+
+2025-04-29T04:24:34.233Z [INFO]: Getting requirements to build editable: finished with status 'done'
+
+35
+
+2025-04-29T04:24:34.234Z [INFO]: Preparing editable metadata (pyproject.toml): started
+
+36
+
+2025-04-29T04:24:34.449Z [INFO]: Preparing editable metadata (pyproject.toml): finished with status 'done'
+
+37
+
+2025-04-29T04:24:34.470Z [INFO]: Requirement already satisfied: flask>=3.1.0 in /root/.pyenv/versions/3.10.16/lib/python3.10/site-packages (from repl-nix-workspace==0.1.0) (3.1.0)
+
+38
+
+2025-04-29T04:24:34.581Z [INFO]: Collecting gunicorn>=23.0.0
+
+39
+
+2025-04-29T04:24:34.621Z [INFO]: Downloading gunicorn-23.0.0-py3-none-any.whl (85 kB)

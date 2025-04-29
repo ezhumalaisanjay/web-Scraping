@@ -1,0 +1,63 @@
+Running the code in my project results in the following:
+
+ed content from Google cache
+INFO:enhanced_linkedin_scraper:Extracted 1 posts from LinkedIn
+INFO:enhanced_linkedin_scraper:LinkedIn blocking detected - adding extra protection measures
+INFO:enhanced_linkedin_scraper:Fetching LinkedIn page: https://tt.linkedin.com/company/sixty-one-steps-advertising-pvt-ltd/jobs
+WARNING:enhanced_linkedin_scraper:LinkedIn blocking detected! Status code: 999
+INFO:enhanced_linkedin_scraper:Attempting to fetch content through Google cache...
+INFO:enhanced_linkedin_scraper:LinkedIn blocking detected - adding extra protection measures
+INFO:enhanced_linkedin_scraper:Successfully retrieved content from Google cache
+INFO:enhanced_linkedin_scraper:Extracted 1 jobs from LinkedIn
+INFO:enhanced_linkedin_scraper:LinkedIn blocking detected - adding extra protection measures
+INFO:enhanced_linkedin_scraper:Fetching LinkedIn page: https://tt.linkedin.com/company/sixty-one-steps-advertising-pvt-ltd/people
+WARNING:enhanced_linkedin_scraper:LinkedIn blocking detected! Status code: 999
+INFO:enhanced_linkedin_scraper:Attempting to fetch content through Google cache...
+INFO:enhanced_linkedin_scraper:LinkedIn blocking detected - adding extra protection measures
+INFO:enhanced_linkedin_scraper:Successfully retrieved content from Google cache
+INFO:enhanced_linkedin_scraper:Extracted 0 leadership and 0 employees from LinkedIn
+INFO:enhanced_linkedin_scraper:Completed full extraction for: https://tt.linkedin.com/company/sixty-one-steps-advertising-pvt-ltd/
+If applicable, propose a fix immediately.
+
+EP
+
+ezhumalaisanjay
+Assistant
+just now
+It looks like your code is encountering blocking from LinkedIn, which is returning a status code of 999. This typically indicates that LinkedIn has detected automated scraping and is preventing access.
+
+Here are a few adjustments you can make to improve your scraper's chances of successful retrieval:
+
+Increase Request Headers Specificity: Ensure your scraper mimics a regular browser user by setting appropriate headers in your requests. This can sometimes bypass protections.
+
+Add a Delay Between Requests: Adding sleep time between requests can help mimic normal browsing behavior.
+
+Below is an example of how you might modify your scraping function to include headers and delays:
+
+import time
+import requests
+def fetch_linkedin_page(url):
+    headers = {
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36",
+        "Accept-Language": "en-US,en;q=0.9",
+        "Accept-Encoding": "gzip, deflate, br",
+        "Connection": "keep-alive"
+    }
+    
+    try:
+        response = requests.get(url, headers=headers)
+        response.raise_for_status()  # Check for request errors
+        return response.text
+    except requests.exceptions.HTTPError as err:
+        print(f"HTTP error occurred: {err}")
+    except Exception as e:
+        print(f"An error occurred: {e}")
+    
+    return None
+# Example usage
+linkedin_url = "https://tt.linkedin.com/company/sixty-one-steps-advertising-pvt-ltd/jobs"
+page_content = fetch_linkedin_page(linkedin_url)
+if page_content:
+    print("Page fetched successfully!")
+    time.sleep(3)  # Delay between requests
+Make sure that you adjust the logic in your existing scraper accordingly to integrate these enhancements.

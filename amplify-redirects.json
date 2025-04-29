@@ -1,0 +1,52 @@
+[
+  {
+    "source": "/api/*",
+    "target": "/api/:splat",
+    "status": "200"
+  },
+  {
+    "source": "/static/*",
+    "target": "/static/:splat",
+    "status": "200"
+  },
+  {
+    "source": "/extract",
+    "target": "/extract",
+    "status": "200"
+  },
+  {
+    "source": "/batch",
+    "target": "/batch",
+    "status": "200"
+  },
+  {
+    "source": "/scrape",
+    "target": "/scrape",
+    "status": "200"
+  },
+  {
+    "source": "/about",
+    "target": "/about",
+    "status": "200"
+  },
+  {
+    "source": "/health",
+    "target": "/health",
+    "status": "200"
+  },
+  {
+    "source": "/cors-test",
+    "target": "/cors-test",
+    "status": "200"
+  },
+  {
+    "source": "/",
+    "target": "/",
+    "status": "200"
+  },
+  {
+    "source": "/*",
+    "target": "/index.html",
+    "status": "404"
+  }
+]

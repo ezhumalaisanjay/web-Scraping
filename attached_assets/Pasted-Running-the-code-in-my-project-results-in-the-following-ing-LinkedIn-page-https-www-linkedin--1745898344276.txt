@@ -1,0 +1,45 @@
+Running the code in my project results in the following:
+
+ing LinkedIn page: https://www.linkedin.com/company/contustech
+WARNING:authenticated_linkedin_scraper:Received non-200 status code: 999 for https://www.linkedin.com/company/contustech
+INFO:authenticated_linkedin_scraper:Setting up LinkedIn access with minimal authentication...
+INFO:authenticated_linkedin_scraper:Testing LinkedIn access with: https://www.linkedin.com/company/microsoft/
+WARNING:authenticated_linkedin_scraper:LinkedIn access test returned status code: 999
+INFO:authenticated_linkedin_scraper:Fetching LinkedIn page: https://www.linkedin.com/company/contustech/jobs
+WARNING:authenticated_linkedin_scraper:Received non-200 status code: 999 for https://www.linkedin.com/company/contustech/jobs
+ERROR:authenticated_linkedin_scraper:Could not fetch LinkedIn jobs page: https://www.linkedin.com/company/contustech/jobs
+INFO:authenticated_linkedin_scraper:Setting up LinkedIn access with minimal authentication...
+INFO:authenticated_linkedin_scraper:Testing LinkedIn access with: https://www.linkedin.com/company/microsoft/
+WARNING:authenticated_linkedin_scraper:LinkedIn access test returned status code: 999
+INFO:authenticated_linkedin_scraper:Fetching LinkedIn page: https://www.linkedin.com/company/contustech/people
+WARNING:authenticated_linkedin_scraper:Received non-200 status code: 999 for https://www.linkedin.com/company/contustech/people
+ERROR:authenticated_linkedin_scraper:Could not fetch LinkedIn people page: https://www.linkedin.com/company/contustech/people
+If applicable, propose a fix immediately.
+
+EP
+
+ezhumalaisanjay
+Assistant
+just now
+The warning messages you’re seeing indicate that the LinkedIn scraper is receiving a status code of 999, which typically means that the requests to LinkedIn are being blocked. This can happen due to LinkedIn's API restrictions or if the scraper is not correctly authenticated.
+
+To address this issue, you can integrate a more robust authentication method or ensure that your requests are properly formatted. Here are common steps you can take to improve access:
+
+Check Authentication Credentials: Make sure you are using valid and correct LinkedIn credentials for authentication. Also, confirm that you have the necessary permissions for the actions you are trying to perform.
+
+Implement Rate Limiting: If your scraper is making multiple requests in a short time, LinkedIn could be blocking it. Consider implementing a delay between requests.
+
+User-Agent Header: Ensure you are sending a proper User-Agent header in your requests to mimic a real browser request, which can sometimes help bypass simplistic bot detection.
+
+Adjust Scraper Settings: If your scraper has any configurations for retries or response handling, ensure they are correctly set.
+
+Here's a quick example of how to set a User-Agent header using requests in Python:
+
+import requests
+headers = {
+    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.93 Safari/537.36'
+}
+response = requests.get('https://www.linkedin.com/company/contustech', headers=headers)
+print(response.status_code)
+Make sure to replace your requests with the above format and handle the authentication properly. If you continue experiencing issues, you might need to check if your data scraping strategy complies with LinkedIn's terms of service.
+

@@ -1,0 +1,44 @@
+version: 1.0
+backend:
+  phases:
+    preBuild:
+      commands:
+        - pyenv global 3.10.16
+        - python --version
+        - echo "Setting up Python environment for LinkedIn Business Intelligence Extractor"
+        - chmod +x amplify-hooks/pre-deploy.sh
+        - amplify-hooks/pre-deploy.sh
+    build:
+      commands:
+        - pip install --upgrade pip
+        - pip install wheel setuptools
+        - pip install -e .
+        - echo "Creating necessary directories"
+        - mkdir -p static/css
+        - mkdir -p static/js
+        - mkdir -p static/images
+        - echo "Export configuration"
+        - chmod +x scripts/start_application.sh
+        - chmod +x scripts/stop_application.sh
+    postBuild:
+      commands:
+        - echo "Running post-build tasks"
+        - chmod +x amplify-hooks/post-deploy.sh
+        - amplify-hooks/post-deploy.sh
+        - echo "Setting up environment variables"
+        - echo "export FLASK_APP=main.py" > .env
+        - echo "export FLASK_ENV=production" >> .env
+        - echo "export PORT=8080" >> .env
+        - echo "export PYTHONPATH=$(pwd)" >> .env
+        
+  artifacts:
+    baseDirectory: /
+    files:
+      - '**/*'
+      - 'static/**/*'
+    discard-paths: no
+    
+  cache:
+    paths: 
+      - node_modules/**/*
+      - .pip-cache/**/*
